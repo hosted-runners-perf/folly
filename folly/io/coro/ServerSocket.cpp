@@ -105,14 +105,13 @@ Task<std::unique_ptr<Transport>> ServerSocket::accept() {
   socket_->addAcceptCallback(&cb, nullptr);
   socket_->startAccepting();
   auto cancelToken = co_await folly::coro::co_current_cancellation_token;
-  CancellationCallback cancellationCallback{
-      cancelToken, [&baton] { baton.post(); }};
+  CancellationCallback cancellationCallback{cancelToken, [&baton, this] {
+                                              this->socket_->stopAccepting();
+                                              baton.post();
+                                            }};
 
   co_await baton;
-  if (cancelToken.isCancellationRequested()) {
-    socket_->stopAccepting();
-    co_yield co_cancelled;
-  }
+  co_await folly::coro::co_safe_point;
   if (cb.error) {
     co_yield co_error(std::move(cb.error));
   }
