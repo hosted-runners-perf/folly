@@ -1995,13 +1995,14 @@ int AsyncSSLSocket::sslVerifyCallback(
   auto cert = std::make_unique<BasicTransportCertificate>(
       std::move(cn), std::move(peer));
 
-  try {
-    self->setPeerCertificate(
-        self->certificateIdentityVerifier_->verifyLeaf(*cert.get()));
-  } catch (folly::CertificateIdentityVerifierException& e) {
+  auto certVerifyResult =
+      self->certificateIdentityVerifier_->verifyLeaf(*cert.get());
+
+  if (certVerifyResult.hasException()) {
     LOG(ERROR) << "AsyncSSLSocket::sslVerifyCallback(this=" << self
                << ", fd=" << self->fd_
-               << ") Failed to verify leaf certificate identity(ies): " << e;
+               << ") Failed to verify leaf certificate identity(ies): "
+               << folly::exceptionStr(certVerifyResult.exception());
     return 0;
   }
 
