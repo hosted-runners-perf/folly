@@ -20,7 +20,6 @@
 
 #include <folly/Conv.h>
 #include <folly/Optional.h>
-#include <folly/Range.h>
 #include <folly/functional/Invoke.h>
 
 namespace folly {
@@ -74,7 +73,7 @@ template <
 const typename Map::mapped_type& get_or_throw(
     const Map& map,
     const Key& key,
-    const StringPiece& exceptionStrPrefix = StringPiece()) {
+    const std::string& exceptionStrPrefix = std::string()) {
   auto pos = map.find(key);
   if (pos != map.end()) {
     return pos->second;
@@ -89,7 +88,7 @@ template <
 typename Map::mapped_type& get_or_throw(
     Map& map,
     const Key& key,
-    const StringPiece& exceptionStrPrefix = StringPiece()) {
+    const std::string& exceptionStrPrefix = std::string()) {
   auto pos = map.find(key);
   if (pos != map.end()) {
     return pos->second;
