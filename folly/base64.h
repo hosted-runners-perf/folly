@@ -22,7 +22,6 @@
 #include <string_view>
 #include <vector>
 #include <folly/CPortability.h>
-#include <folly/Portability.h>
 #include <folly/detail/base64_detail/Base64Api.h>
 #include <folly/detail/base64_detail/Base64Common.h>
 #include <folly/lang/Exception.h>
@@ -79,10 +78,8 @@ inline auto base64URLDecode(std::string_view s) -> std::string;
 constexpr std::size_t base64EncodedSize(std::size_t inSize) noexcept;
 constexpr std::size_t base64URLEncodedSize(std::size_t inSize) noexcept;
 
-inline FOLLY_CXX20_CONSTEXPR char* base64Encode(
-    const char* f, const char* l, char* o) noexcept;
-inline FOLLY_CXX20_CONSTEXPR char* base64URLEncode(
-    const char* f, const char* l, char* o) noexcept;
+constexpr char* base64Encode(const char* f, const char* l, char* o) noexcept;
+constexpr char* base64URLEncode(const char* f, const char* l, char* o) noexcept;
 
 constexpr std::size_t base64DecodedSize(const char* f, const char* l) noexcept;
 constexpr std::size_t base64DecodedSize(std::string_view s) noexcept;
@@ -96,15 +93,15 @@ struct base64_decode_result {
   char* o;
 };
 
-inline FOLLY_CXX20_CONSTEXPR base64_decode_result
-base64Decode(const char* f, const char* l, char* o) noexcept;
-inline FOLLY_CXX20_CONSTEXPR base64_decode_result
-base64Decode(std::string_view s, char* o) noexcept;
+constexpr base64_decode_result base64Decode(
+    const char* f, const char* l, char* o) noexcept;
+constexpr base64_decode_result base64Decode(
+    std::string_view s, char* o) noexcept;
 
-inline FOLLY_CXX20_CONSTEXPR base64_decode_result
-base64URLDecode(const char* f, const char* l, char* o) noexcept;
-inline FOLLY_CXX20_CONSTEXPR base64_decode_result
-base64URLDecode(std::string_view s, char* o) noexcept;
+constexpr base64_decode_result base64URLDecode(
+    const char* f, const char* l, char* o) noexcept;
+constexpr base64_decode_result base64URLDecode(
+    std::string_view s, char* o) noexcept;
 
 // -----------------------------------------------------------------
 // implementation
@@ -121,12 +118,11 @@ constexpr std::size_t base64URLEncodedSize(std::size_t inSize) noexcept {
   return detail::base64_detail::base64URLEncodedSize(inSize);
 }
 
-inline FOLLY_CXX20_CONSTEXPR char* base64Encode(
-    const char* f, const char* l, char* o) noexcept {
+constexpr char* base64Encode(const char* f, const char* l, char* o) noexcept {
   return detail::base64_detail::base64Encode(f, l, o);
 }
 
-inline FOLLY_CXX20_CONSTEXPR char* base64URLEncode(
+constexpr char* base64URLEncode(
     const char* f, const char* l, char* o) noexcept {
   return detail::base64_detail::base64URLEncode(f, l, o);
 }
@@ -164,25 +160,25 @@ constexpr std::size_t base64URLDecodedSize(std::string_view s) noexcept {
   return folly::base64URLDecodedSize(s.data(), s.data() + s.size());
 }
 
-inline FOLLY_CXX20_CONSTEXPR base64_decode_result
-base64Decode(const char* f, const char* l, char* o) noexcept {
+constexpr base64_decode_result base64Decode(
+    const char* f, const char* l, char* o) noexcept {
   auto detailResult = folly::detail::base64_detail::base64Decode(f, l, o);
   return {detailResult.isSuccess, detailResult.o};
 }
 
-inline FOLLY_CXX20_CONSTEXPR base64_decode_result
-base64Decode(std::string_view s, char* o) noexcept {
+constexpr base64_decode_result base64Decode(
+    std::string_view s, char* o) noexcept {
   return folly::base64Decode(s.data(), s.data() + s.size(), o);
 }
 
-inline FOLLY_CXX20_CONSTEXPR base64_decode_result
-base64URLDecode(const char* f, const char* l, char* o) noexcept {
+constexpr base64_decode_result base64URLDecode(
+    const char* f, const char* l, char* o) noexcept {
   auto detailResult = detail::base64_detail::base64URLDecode(f, l, o);
   return {detailResult.isSuccess, detailResult.o};
 }
 
-inline FOLLY_CXX20_CONSTEXPR base64_decode_result
-base64URLDecode(std::string_view s, char* o) noexcept {
+constexpr base64_decode_result base64URLDecode(
+    std::string_view s, char* o) noexcept {
   return folly::base64URLDecode(s.data(), s.data() + s.size(), o);
 }
 

@@ -16,12 +16,10 @@
 
 #pragma once
 
-#include <cstdint>
-#include <folly/Portability.h>
-#include <folly/detail/base64_detail/Base64HiddenConstants.h>
-
-#if FOLLY_SSE_PREREQ(4, 2)
+#if defined(__SSE4_2__)
 #include <immintrin.h>
+#include <cstdint>
+#include <folly/detail/base64_detail/Base64HiddenConstants.h>
 
 namespace folly::detail::base64_detail {
 
@@ -164,4 +162,4 @@ struct Base64_SSE4_2_Platform {
 
 } // namespace folly::detail::base64_detail
 
-#endif // FOLLY_SSE_PREREQ(4, 2)
+#endif // defined(__SSE4_2__)

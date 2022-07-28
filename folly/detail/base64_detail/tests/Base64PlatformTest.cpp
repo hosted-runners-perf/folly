@@ -22,11 +22,16 @@
 #include <vector>
 #include <folly/portability/GTest.h>
 
+#if defined(__SSE4_2__)
 #include <folly/detail/base64_detail/Base64_SSE4_2_Platform.h>
+#endif // defined(__SSE4_2__)
 
 namespace folly::detail::base64_detail {
 namespace {
-#if FOLLY_SSE_PREREQ(4, 2)
+
+#if defined(__SSE4_2__)
+using PlatformsToTest = ::testing::Types<Base64_SSE4_2_Platform>;
+#endif // defined(__SSE4_2__)
 
 constexpr std::array<std::uint8_t, 16> expectedEncodeToIndexes(
     std::array<std::uint8_t, 16> in) {
@@ -159,7 +164,8 @@ struct Base64PlatformTest : ::testing::Test {
   }
 };
 
-TYPED_TEST_SUITE(Base64PlatformTest, ::testing::Types<Base64_SSE4_2_Platform>);
+#if defined(__SSE4_2__)
+TYPED_TEST_SUITE(Base64PlatformTest, PlatformsToTest);
 
 TYPED_TEST(Base64PlatformTest, EncodeToIndexes) {
   using RegBytes = typename TestFixture::RegBytes;
@@ -267,7 +273,7 @@ TYPED_TEST(Base64PlatformTest, packIndexesToBytes) {
     ASSERT_EQ(expected, actual);
   }
 }
-#endif // FOLLY_SSE_PREREQ(4, 2)
+#endif // defined(__SSE4_2__)
 
 } // namespace
 } // namespace folly::detail::base64_detail

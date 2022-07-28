@@ -14,13 +14,11 @@
  * limitations under the License.
  */
 
-#include <folly/detail/base64_detail/Base64_SSE4_2.h>
+#if defined(__SSE4_2__)
 
-#include <folly/Portability.h>
 #include <folly/detail/base64_detail/Base64Simd.h>
+#include <folly/detail/base64_detail/Base64_SSE4_2.h>
 #include <folly/detail/base64_detail/Base64_SSE4_2_Platform.h>
-
-#if FOLLY_SSE_PREREQ(4, 2)
 
 namespace folly::detail::base64_detail {
 
