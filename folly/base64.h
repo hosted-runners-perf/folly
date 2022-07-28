@@ -29,8 +29,7 @@
 
 namespace folly {
 
-//
-// base64 encoding/decoding
+// Base64, SIMD optimized on some platforms.
 //
 // There are a few variations of base64 encoding.
 //
@@ -43,9 +42,8 @@ namespace folly {
 // Decoding with base64URL will accept both base64 and base64URL encoded data +
 // padding is always optional.
 //
-// SIMD implementation is based on 0x80 blog.
-// See details explained in folly/detail/base64_detail/README.md
-//
+// Implementation details can be found in the
+// folly/detail/base64_detail/README.md
 
 //
 // High level API.
@@ -69,8 +67,8 @@ inline auto base64URLDecode(std::string_view s) -> std::string;
 // This API does not throw and is constexpr enabled.
 //
 // Encode returns a pointer past the last the byte written
-// Decode returns a struct with `is_success` flag and the pointer `o`
-// past the last char writtern.
+// Decode returns a struct with isSuccess flag and the pointer o past
+// the last writtern.
 //
 // NOTE: decode will not stop writing when encountering a failure
 //       and can always write up to size.
